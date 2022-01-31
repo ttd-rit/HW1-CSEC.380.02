@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+    webserver:
+        ports:
+            - 8080:8080
+        build:
+          context: .
+          dockerfile: DockerfileWeb
+        volumes:
+            - ./ports.conf:/etc/apache2/ports.conf
+            - ./000-default.conf:/etc/apache2/sites-available/000-default.conf
+            - ./index.html:/var/www/html/index.html
+    webserver2:
+        ports:
+            - 81:81
+        build:
+          context: .
+          dockerfile: DockerfileOtherWeb
+        volumes:
+            - ./Otherwebserver/ports.conf:/etc/apache2/ports.conf
+            - ./Otherwebserver/000-default.conf:/etc/apache2/sites-available/000-default.conf
+            - ./Otherwebserver/index.html:/var/www/html/index.html
+    webserver3:
+        ports:
+            - 82:82
+        build:
+          context: .
+          dockerfile: DockerfileOther2Web
+        volumes:
+            - ./Other2webserver/ports.conf:/etc/apache2/ports.conf
+            - ./Other2webserver/000-default.conf:/etc/apache2/sites-available/000-default.conf
+            - ./Other2webserver/index.html:/var/www/html/index.html
+
+    cachserver:
+        build:
+          context: .
+          dockerfile: DockerfileCach
+        volumes:
+            - ./nginx/default:/etc/nginx/sites-available/default
+            - ./nginx/index.nginx-debian.html:/var/www/html/index.nginx-debian.html
+        ports: 
+            - 80:80
+    loadserver:
+        build:
+          context: .
+          dockerfile: Dockerfileload
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 83:8080
+
